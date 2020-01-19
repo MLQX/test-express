@@ -39,7 +39,8 @@ app.engine('html', ejs.renderFile)
 
 app.use(jsonParser)  //json解析器
 app.use(urlencodedParser) //表单解析器
-app.use('/static',express.static(path.join(__dirname,'static')))
+
+app.use('/static', express.static(path.join(__dirname, 'static')));  // 设置静态文件目录
 
 app.get('/', function (req, res) {
     res.send('this is home page')

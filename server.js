@@ -2,6 +2,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const multer = require('multer') //处理文件上传
+const ejs = require('ejs')
+
+
 // const upload = multer({dest:'./upload/'})
 
 //更改文件存储地址
@@ -13,7 +16,7 @@ const createFolder = function (folder) {
     }
 }
 const folder = './storage'
-// createFolder(folder);  //创建文件夹
+createFolder(folder);  //创建文件夹
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, folder);
@@ -27,6 +30,12 @@ const upload = multer({storage: storage})  //使用磁盘存储
 const app = express()
 const jsonParser = bodyParser.json()
 const urlencodedParser = bodyParser.urlencoded({extended: false})
+//设置渲染模板
+app.set('views', './views')
+app.set('view engine', 'ejs')
+//为html扩展名注册ejs
+app.engine('html', ejs.renderFile)
+
 app.use(jsonParser)  //json解析器
 app.use(urlencodedParser) //表单解析器
 app.get('/', function (req, res) {
@@ -96,10 +105,47 @@ app.get('/form',
 
 
 //上传文件处理，需求：如果上传的文件大于2M或者不是图片文件，则拒绝上传，否则将其放入./upload文件夹
+//TODO
 app.post('/form', upload.single('logo'), function (req, res) {
     console.dir(req.file)
 
     res.send({ret: 0})
     // console.log(__dirname)
 })
+
+//模板引擎 ejs
+app.get('/que/:id', function (req, res) {
+    // console.dir(req.file)
+    const id = req.params.id;
+    try{
+        const cid = parseInt(id)
+        if (!checkNum(cid)) {
+            console.log('not number')
+        }
+    }catch (e) {
+        throw new Error("输入不是数字！");
+    }
+    const file = 'hello.html';
+    const obj = {
+        name: '张三',
+        age: 18,
+        favorite: ['eating', 'chicken', 'duck']
+    }
+    // res.sendFile(file)
+    res.render(file, {obj: obj, id: id})
+    // res.send({ret: 0})
+    // console.log(__dirname)
+    // res.send({ret:0})
+});
+
+
+/**
+ * 检测输入是否是数字
+ * @param n
+ */
+function checkNum(n) {
+    return typeof n === 'number' && !isNaN(n);
+}
+
+
 app.listen(3200);

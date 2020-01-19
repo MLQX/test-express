@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--<form action="/form" method="post" enctype="multipart/form-data">-->
+<!--    <input type="file" name="logo">-->
+<!--    <input type="text" name="desc">-->
+<!--    <input type="submit" value="上传">-->
+<!--</form>-->
+<ul>
+    <ol><%= id %></ol>
+    <ol>2</ol>
+    <ol>3</ol>
+    <ol>4</ol>
+</ul>
+<br>
+<h1>模板写法</h1>
+<ul>
+
+    <ol><%= obj.name %></ol>
+    <ol><%= obj.age %></ol>
+    <% obj.favorite.forEach(function(item){ %>
+        <ol><%= item %></ol>
+    <% }) %>
+</ul>
+
+
+
+</body>
+</html>
